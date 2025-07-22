@@ -4,6 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
 import { Toaster } from "sonner";
+import { ModalProvider } from "@/components/providers/modal-provider";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,19 +22,18 @@ export const metadata: Metadata = {
   description: "To Zot down ideas in a cleaner way",
   icons: {
     icon: [
-    {
-      media: "(prefers-color-scheme:light)",
-      url:"/logo-dark.png",
-      href:"/logo-dark.png"
-    },
-    {
-      media: "(prefers-color-scheme:dark)",
-      url:"/logo.png",
-      href:"/logo.png"
-    }
-  ]
-  }
-
+      {
+        media: "(prefers-color-scheme:light)",
+        url: "/logo-dark.png",
+        href: "/logo-dark.png",
+      },
+      {
+        media: "(prefers-color-scheme:dark)",
+        url: "/logo.png",
+        href: "/logo.png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -46,15 +47,18 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
         <ConvexClientProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Toaster position="bottom-center"/>
-            {children}
-          </ThemeProvider>
+          <EdgeStoreProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Toaster position="bottom-center" />
+              <ModalProvider />
+              {children}
+            </ThemeProvider>
+          </EdgeStoreProvider>
         </ConvexClientProvider>
       </body>
     </html>

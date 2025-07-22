@@ -105,7 +105,7 @@ const Item = ({
         paddingLeft: level ? `${level * 12 + 12}px` : "12px",
       }}
       className={cn(
-        "group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5 flex items-center text-muted-foreground font-medium",
+        "group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5 flex items-center text-muted-foreground font-medium select-none cursor-pointer",
         active && "bg/primary/5 text-primary"
       )}
     >
@@ -119,7 +119,7 @@ const Item = ({
         </div>
       )}
       {documentIcon ? (
-        <div className="shrink-0 text-[18px] mr-2">{documentIcon}</div>
+        <div className="shrink-0 text-[15px] mr-2">{documentIcon}</div>
       ) : (
         <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
       )}
@@ -142,13 +142,14 @@ const Item = ({
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="w-60"
+              className="w-60 cursor-pointer"
               align="start"
               side="right"
               forceMount
+              
             >
-              <DropdownMenuItem onClick={onArchive}>
-                <Trash className="h-4 w-4 mr-2" />
+              <DropdownMenuItem onClick={onArchive} className="dark:hover:text-rose-500 hover:text-rose-500 cursor-pointer">
+                <Trash className="h-4 w-4 mr-2 dark:hover:text-rose-500 hover:text-rose-500 " />
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />

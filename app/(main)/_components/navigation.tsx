@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 
 import { ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings, Trash } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItems from "./user-items";
@@ -13,12 +13,18 @@ import Item from "./item";
 import { toast } from "sonner";
 import DocumentList from "./document-list";
 import { Popover, PopoverTrigger,PopoverContent } from "@/components/ui/popover";
-
 import TrashBox from "./trash-box";
+import { useSearch } from "@/hooks/use-search";
+import { useSettings } from "@/hooks/use-settings";
+import Navbar from "./navbar";
 
 const Navigation = () => {
+  const params = useParams();
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width:768px)");
+
+  const search = useSearch();
+  const settings = useSettings();
 
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -131,13 +137,13 @@ const Navigation = () => {
         <div>
           <UserItems />
           <Item 
-            onClick={()=>{}} 
+            onClick={search.onOpen} 
             label="Search" 
             isSearch
             icon={Search}
           />
           <Item 
-            onClick={()=>{}} 
+            onClick={settings.onOpen} 
             label="Settings" 
             icon={Settings} 
           />
@@ -177,6 +183,13 @@ const Navigation = () => {
           isMobile && "left-0 w-full"
         )}
       >
+        {!!params.documentId ? (
+          <Navbar 
+            isCollapsed={isCollapsed}
+            onResetWidth={resetWidth}
+          />
+        ) : (
+
         <nav className="bg-transparent px-3 py-2 w-full ">
           {isCollapsed && (
             <MenuIcon
@@ -186,6 +199,7 @@ const Navigation = () => {
             />
           )}
         </nav>
+        )}
       </div>
     </>
   );

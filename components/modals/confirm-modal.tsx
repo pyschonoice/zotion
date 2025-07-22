@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { AlertDialogCancel } from "@radix-ui/react-alert-dialog";
+import { AlertDialogCancel } from "@/components/ui/alert-dialog";
 
 interface ConfirmModalProps {
   children: React.ReactNode;
