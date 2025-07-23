@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 
 import { ChevronsLeft, MenuIcon, Plus, PlusCircle, Search, Settings, Trash } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname,useRouter } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import UserItems from "./user-items";
@@ -22,6 +22,7 @@ const Navigation = () => {
   const params = useParams();
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width:768px)");
+  const router = useRouter();
 
   const search = useSearch();
   const settings = useSettings();
@@ -112,6 +113,7 @@ const Navigation = () => {
       success: "New note created!",
       error: "Failed to create a new note.",
     });
+    router.push(`/documents/${params.documentId}`)
   };
 
   return (

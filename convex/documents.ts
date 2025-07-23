@@ -76,9 +76,7 @@ export const getSearch = query({
 
     const documents = await ctx.db
       .query("documents")
-      .withIndex("by_user", (q) =>
-        q.eq("userId", userId)
-      )
+      .withIndex("by_user", (q) => q.eq("userId", userId))
       .filter((q) => q.eq(q.field("isArchived"), false))
       .order("desc")
       .collect();
@@ -200,29 +198,28 @@ export const remove = mutation({
           q.eq("userId", userId).eq("parentDocument", documentId)
         )
         .collect();
-        
+
       for (const child of children) {
-        await ctx.db.delete(child._id)
+        await ctx.db.delete(child._id);
         await recursiveDelete(child._id);
       }
     };
     const document = await ctx.db.delete(args.id);
     recursiveDelete(args.id);
     return document;
-  }
+  },
 });
 
-
 export const getById = query({
-  args:{
-    documentId: v.id("documents")
+  args: {
+    documentId: v.id("documents"),
   },
-  handler: async (ctx , args ) => {
+  handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     const document = await ctx.db.get(args.documentId);
 
-    if(!document) throw new Error("Not Found");
-    if(document.isPublished && !document.isArchived){
+    if (!document) throw new Error("Not Found");
+    if (document.isPublished && !document.isArchived) {
       return document;
     }
     if (!identity) {
@@ -230,91 +227,116 @@ export const getById = query({
     }
     const userId = identity.subject;
 
-    if(document.userId !== userId){
-      throw new Error("Unauthorized")
+    if (document.userId !== userId) {
+      throw new Error("Unauthorized");
     }
 
     return document;
-  }
-})
+  },
+});
 
 export const update = mutation({
-  args:{
-    id:v.id("documents"),
+  args: {
+    id: v.id("documents"),
     title: v.optional(v.string()),
     content: v.optional(v.string()),
     coverImage: v.optional(v.string()),
     icon: v.optional(v.string()),
     isPublished: v.optional(v.boolean()),
+    publishedContent:v.optional(v.string())
   },
-  handler: async (ctx , args) => {
+  handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       throw new Error("Not Authenticated");
     }
     const userId = identity.subject;
-    const {id, ...rest} = args
+    const { id, ...rest } = args;
 
     const existingDocument = await ctx.db.get(args.id);
     if (!existingDocument) throw new Error("Not Found");
 
     if (existingDocument.userId !== userId) throw new Error("Unauthorized");
 
-    const document = await ctx.db.patch(args.id,{
-      ...rest
+    const document = await ctx.db.patch(args.id, {
+      ...rest,
     });
 
     return document;
-  }
-})
-
+  },
+});
 
 export const removeIcon = mutation({
-  args:{
-    id:v.id("documents"),
+  args: {
+    id: v.id("documents"),
   },
-  handler: async (ctx , args) => {
+  handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       throw new Error("Not Authenticated");
     }
     const userId = identity.subject;
 
-
     const existingDocument = await ctx.db.get(args.id);
     if (!existingDocument) throw new Error("Not Found");
 
     if (existingDocument.userId !== userId) throw new Error("Unauthorized");
 
-    const document = await ctx.db.patch(args.id,{
-      icon:undefined
+    const document = await ctx.db.patch(args.id, {
+      icon: undefined,
     });
 
     return document;
-  }
-})
-
-export const removeCoverImage= mutation({
-  args:{
-    id:v.id("documents"),
   },
-  handler: async (ctx , args) => {
+});
+
+export const removeCoverImage = mutation({
+  args: {
+    id: v.id("documents"),
+  },
+  handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       throw new Error("Not Authenticated");
     }
     const userId = identity.subject;
 
-
     const existingDocument = await ctx.db.get(args.id);
     if (!existingDocument) throw new Error("Not Found");
 
     if (existingDocument.userId !== userId) throw new Error("Unauthorized");
 
-    const document = await ctx.db.patch(args.id,{
-      coverImage:undefined
+    const document = await ctx.db.patch(args.id, {
+      coverImage: undefined,
     });
 
     return document;
-  }
-})
+  },
+});
+
+export const getPath = query({
+  args: { id: v.id("documents") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+    const path = [];
+    let currentId: Id<"documents"> | undefined = args.id;
+
+    while (currentId) {
+      const document: Doc<"documents"> | null = await ctx.db.get(currentId);
+      if (!document || document.userId !== userId) {
+        break;
+      }
+
+      path.push(document);
+      currentId = document.parentDocument;
+    }
+
+    return path.reverse();
+  },
+});

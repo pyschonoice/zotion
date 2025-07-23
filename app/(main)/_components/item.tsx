@@ -75,6 +75,7 @@ const Item = ({
       success: "Note moved to trash Successfully!",
       error: "Failed to trash note.",
     });
+    router.push("/documents")
 
   }
   const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -86,7 +87,7 @@ const Item = ({
         if (!expanded) {
           onExpand?.();
         }
-        //router.push(`/documents/${documentId}`)
+        router.push(`/documents/${documentId}`)
       }
     );
 
@@ -121,7 +122,7 @@ const Item = ({
       {documentIcon ? (
         <div className="shrink-0 text-[15px] mr-2">{documentIcon}</div>
       ) : (
-        <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
+        <Icon className="shrink-0 h-[18px] w-[18px] mr-2 text-muted-foreground" />
       )}
 
       <span className="truncate">{label}</span>

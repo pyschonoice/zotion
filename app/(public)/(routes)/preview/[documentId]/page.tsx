@@ -4,8 +4,6 @@ import { Cover } from "@/components/cover";
 import dynamic from "next/dynamic";
 
 import { useMemo, useState, useEffect } from "react";
-import { useKeyStore } from "@/hooks/use-key-store";
-import { encryptContent, decryptContent } from "@/lib/crypto";
 
 import { ToolBar } from "@/components/toolbar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,45 +18,12 @@ const DocumentIdPage = () => {
     []
   );
 
-  const { mek } = useKeyStore();
-  const [decryptedContent, setDecryptedContent] = useState<string | undefined>(
-    undefined
-  );
-
   const params = useParams();
   const document = useQuery(api.documents.getById, {
     documentId: params.documentId as Id<"documents">,
   });
-  const update = useMutation(api.documents.update);
 
-  useEffect(() => {
-    if (document && document.content && mek) {
-      decryptContent(document.content, mek)
-        .then(setDecryptedContent)
-        .catch((err) => {
-          console.error("Failed to decrypt content:", err);
-          setDecryptedContent("Error: Could not decrypt content.");
-        });
-    } else if (document && !document.content) {
-      setDecryptedContent("");
-    }
-  }, [document, mek]);
-
-  const onChange = async (content: string) => {
-    if (!mek) return;
-
-    const encrypted = await encryptContent(content, mek);
-
-    update({
-      id: params.documentId as Id<"documents">,
-      content: encrypted,
-    });
-  };
-
-  if (
-    document === undefined ||
-    (document?.content && decryptedContent === undefined)
-  ) {
+  if (document === undefined) {
     return (
       <div>
         <Cover.Skeleton />
@@ -79,11 +44,15 @@ const DocumentIdPage = () => {
   }
   return (
     <div className="pb-40">
-      <Cover url={document.coverImage} />
+      <Cover preview url={document.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-        <ToolBar initialData={document} />
+        <ToolBar preview initialData={document} />
 
-        <Editor onChange={onChange} initialContent={decryptedContent} />
+        <Editor
+          editable={false}
+          onChange={()=>{}}
+          initialContent={document.publishedContent}
+        />
       </div>
     </div>
   );
