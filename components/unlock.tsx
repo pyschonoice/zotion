@@ -20,7 +20,6 @@ export const Unlock = () => {
   const createUser = useMutation(api.users.createUser);
   const { setMek } = useKeyStore();
 
-  // 🔁 Safe determination of new user
   useEffect(() => {
     if (userData === null) {
       setIsNewUser(true);
@@ -35,7 +34,6 @@ export const Unlock = () => {
     setError("");
 
     try {
-      console.log("isNewUser:", isNewUser);
       if (isNewUser) {
         const salt = window.crypto.getRandomValues(new Uint8Array(16));
         const pdk = await crypto.derivePDK(password, salt);
@@ -57,7 +55,6 @@ export const Unlock = () => {
         setMek(mek);
       }
     } catch (err: any) {
-      console.error("Unlock error:", err);
       const message = err?.message || "Unknown error";
       setError("Incorrect password or an error occurred: " + message);
     } finally {
