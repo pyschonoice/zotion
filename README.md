@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# ✨ Zotion 📝
 
-First, run the development server:
+Zotion is a completely open-source, Notion-like text editor built with **Next.js** and **Convex**. It offers a clean, minimal, and mobile-friendly experience, with the flexibility to self-host using your own Convex account.
+---
+## Hosted At
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+You can check out a live deployment of Zotion here: [zotion.pysn.space](https://zotion.pysn.space)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+* **Minimal, Clean, and Mobile-Friendly UI:** Enjoy a distraction-free writing experience that looks great on any device.
+* **Notion-Like Editor:** Leverage a rich text editing experience similar to Notion, with intuitive formatting and content creation.
+* **Document-Nested Trees:** Organize your thoughts and notes hierarchically with nested documents for a clear overview of your workspace.
+* **Full Search Feature:** Quickly find any information across your entire workspace with powerful search functionality.
+* **Archive Functionality:** Keep your workspace tidy by archiving old or unused documents without permanently deleting them.
+* **Publishable Documents:** Share your documents with the world by publishing them as public web pages.
+* **Encrypted Documents:** Your content is encrypted, providing an extra layer of privacy and security for your notes.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Future Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+I'm constantly working on improving Zotion! Here are some features planned for future releases:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* **Workspaces and Workspace Sharing:** Collaborate with others by creating shared workspaces.
+* **Seamless Live Editing:** Experience real-time collaborative editing with other users, implemented through websockets.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Technologies Used
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* **Next.js:** A React framework for building fast and scalable web applications.
+* **Convex:** A real-time backend as a service, providing the database and serverless functions.
+* **BlockNote Editor:** A highly customizable block-based editor.
+* **Shadcn/ui:** A collection of re-usable components for building beautiful user interfaces.
+* **EdgeStore:** For efficient file storage.
+
+---
+
+## Local Development
+
+To set up Zotion for local development, you'll need to configure the following environment variables:
+
+1.  Create a `.env.local` file in the root of your project.
+2.  Populate it with the following variables, obtaining the necessary keys from your Convex, Clerk, and EdgeStore accounts:
+
+    ```
+    CONVEX_DEPLOY_KEY=your_convex_deploy_key
+    NEXT_PUBLIC_CONVEX_URL=your_public_convex_url
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_public_clerk_publishable_key
+    CLERK_SECRET_KEY=your_clerk_secret_key
+    NEXT_PUBLIC_CLERK_ISSUER_URL=your_public_clerk_issuer_url
+    EDGE_STORE_ACCESS_KEY=your_edgestore_access_key
+    EDGE_STORE_SECRET_KEY=your_edgestore_secret_key
+    ```
+
+3.  Install dependencies:
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
+4.  Run the development server:
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    ```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+
+---
+
+## Contributing
+
+Zotion is an open-source project, and I welcome contributions from the community!
+
+* **Bug Fixes:** Found a bug? Please open an issue or submit a pull request with your fix.
+* **Feature Requests:** Have an idea for a new feature? I'd love to hear it! Open an issue to discuss your proposal.
+
+---
+
+Made ❤️ by [pyschonoice](https://x.com/pyschonoice)
