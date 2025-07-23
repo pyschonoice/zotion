@@ -52,7 +52,7 @@ export async function wrapMEK(mek: CryptoKey, pdk: CryptoKey): Promise<string> {
   });
 
   // Return base64(iv):base64(wrappedKey)
-  return `${arrayBufferToBase64(iv)}:${arrayBufferToBase64(wrappedKey)}`;
+  return `${arrayBufferToBase64(iv.buffer)}:${arrayBufferToBase64(wrappedKey)}`;
 }
 
 // Decrypts the MEK with the PDK ("unwrapping")
@@ -87,7 +87,7 @@ export async function encryptContent(content: string, mek: CryptoKey): Promise<s
         encodedContent
     );
     // We store the IV with the encrypted content, separated by a character that won't appear in base64.
-    return `${arrayBufferToBase64(iv)}:${arrayBufferToBase64(encryptedContent)}`;
+    return `${arrayBufferToBase64(iv.buffer)}:${arrayBufferToBase64(encryptedContent)}`;
 }
 
 // Decrypts document content with the MEK
