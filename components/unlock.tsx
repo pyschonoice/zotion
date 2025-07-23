@@ -54,9 +54,12 @@ export const Unlock = () => {
         const mek = await crypto.unwrapMEK(userData.wrappedMek, pdk);
         setMek(mek);
       }
-    } catch (err: any) {
-      const message = err?.message || "Unknown error";
-      setError("Incorrect password or an error occurred: " + message);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError("Incorrect password or an error occurred: " + err.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
     } finally {
       setIsLoading(false);
     }
